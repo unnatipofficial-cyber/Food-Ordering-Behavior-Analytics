@@ -1,0 +1,3635 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Food Ordering Behavior & Consumer Trends</title>
+
+    <!-- =====================================================
+         TABLEAU EMBEDDING API
+    ====================================================== -->
+
+    <script type="module"
+        src="https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js">
+    </script>
+
+
+    <!-- =====================================================
+         CSS
+    ====================================================== -->
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ====================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f6f8fc;
+            color: #172033;
+            overflow-x: hidden;
+        }
+
+
+        a {
+            text-decoration: none;
+        }
+
+
+        button {
+            font-family: inherit;
+        }
+
+
+        section {
+            scroll-margin-top: 85px;
+        }
+
+
+
+        /* =====================================================
+           CURSOR GLOW
+        ====================================================== */
+
+        .cursor-glow {
+
+            position: fixed;
+
+            width: 180px;
+            height: 180px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(56, 189, 248, 0.12),
+                    transparent 70%
+                );
+
+            pointer-events: none;
+
+            transform: translate(-50%, -50%);
+
+            z-index: 9999;
+
+            left: -200px;
+            top: -200px;
+
+        }
+
+
+
+        /* =====================================================
+           NAVBAR
+        ====================================================== */
+
+        .navbar {
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 72px;
+
+            padding: 0 7%;
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            background: rgba(8, 17, 38, 0.88);
+
+            backdrop-filter: blur(18px);
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.08);
+
+            z-index: 1000;
+
+            animation:
+                navbarDrop
+                0.8s
+                cubic-bezier(.22,1,.36,1);
+
+            transition: 0.35s ease;
+        }
+
+
+        .logo {
+
+            font-size: 19px;
+
+            font-weight: 700;
+
+            color: white;
+
+            letter-spacing: 0.4px;
+        }
+
+
+        .logo span {
+
+            color: #7dd3fc;
+
+        }
+
+
+        .nav-links {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 28px;
+        }
+
+
+        .nav-links a {
+
+            color: #cbd5e1;
+
+            font-size: 14px;
+
+            position: relative;
+
+            transition: 0.3s ease;
+        }
+
+
+        .nav-links a::after {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            bottom: -7px;
+
+            width: 0;
+            height: 2px;
+
+            background: #7dd3fc;
+
+            transition: 0.3s ease;
+        }
+
+
+        .nav-links a:hover {
+
+            color: white;
+        }
+
+
+        .nav-links a:hover::after {
+
+            width: 100%;
+        }
+
+
+        .github-nav {
+
+            padding: 9px 16px;
+
+            border:
+                1px solid
+                rgba(125,211,252,0.5);
+
+            border-radius: 8px;
+
+            color: white !important;
+
+        }
+
+
+        .github-nav::after {
+
+            display: none;
+        }
+
+
+        .github-nav:hover {
+
+            background: #7dd3fc;
+
+            color: #081126 !important;
+
+        }
+
+
+
+        /* =====================================================
+           HERO
+        ====================================================== */
+
+        .hero {
+
+            min-height: 100vh;
+
+            position: relative;
+
+            overflow: hidden;
+
+            display: flex;
+
+            align-items: center;
+
+            padding:
+                130px 8%
+                90px;
+
+            color: white;
+
+            background:
+                radial-gradient(
+                    circle at 20% 20%,
+                    rgba(56,189,248,0.18),
+                    transparent 25%
+                ),
+                radial-gradient(
+                    circle at 80% 30%,
+                    rgba(37,99,235,0.20),
+                    transparent 25%
+                ),
+                radial-gradient(
+                    circle at 50% 90%,
+                    rgba(14,165,233,0.12),
+                    transparent 30%
+                ),
+                #081126;
+
+            background-size: 180% 180%;
+
+            animation:
+                heroGradient
+                12s
+                ease
+                infinite;
+        }
+
+
+        .hero-content {
+
+            max-width: 850px;
+
+            position: relative;
+
+            z-index: 5;
+        }
+
+
+        .hero-content > * {
+
+            opacity: 0;
+
+            transform: translateY(35px);
+
+            animation:
+                heroText
+                1s
+                cubic-bezier(.22,1,.36,1)
+                forwards;
+        }
+
+
+        .hero-tag {
+
+            display: inline-block;
+
+            padding:
+                8px 14px;
+
+            margin-bottom: 25px;
+
+            border:
+                1px solid
+                rgba(125,211,252,0.4);
+
+            border-radius: 30px;
+
+            background:
+                rgba(125,211,252,0.06);
+
+            color: #bae6fd;
+
+            font-size: 12px;
+
+            letter-spacing: 1.5px;
+
+            animation-delay: 0.2s !important;
+        }
+
+
+        .hero h1 {
+
+            font-size:
+                clamp(48px, 7vw, 88px);
+
+            line-height: 1.02;
+
+            letter-spacing: -3px;
+
+            margin-bottom: 25px;
+
+            animation-delay: 0.4s !important;
+        }
+
+
+        .hero h1 span {
+
+            color: #7dd3fc;
+
+        }
+
+
+        .hero-description {
+
+            max-width: 680px;
+
+            color: #cbd5e1;
+
+            font-size: 18px;
+
+            line-height: 1.8;
+
+            animation-delay: 0.6s !important;
+        }
+
+
+        .hero-buttons {
+
+            display: flex;
+
+            gap: 14px;
+
+            margin-top: 35px;
+
+            animation-delay: 0.8s !important;
+        }
+
+
+        .btn {
+
+            position: relative;
+
+            overflow: hidden;
+
+            display: inline-block;
+
+            padding:
+                13px 22px;
+
+            border-radius: 9px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+
+        .btn-primary {
+
+            background: #7dd3fc;
+
+            color: #081126;
+        }
+
+
+        .btn-primary:hover {
+
+            transform: translateY(-5px);
+
+            box-shadow:
+                0 15px 35px
+                rgba(125,211,252,0.25);
+        }
+
+
+        .btn-outline {
+
+            border:
+                1px solid
+                #334155;
+
+            color: white;
+        }
+
+
+        .btn-outline:hover {
+
+            border-color: #7dd3fc;
+
+            transform: translateY(-5px);
+        }
+
+
+        .btn::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: -120%;
+
+            width: 70%;
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,255,255,0.45),
+                    transparent
+                );
+
+            transform: skewX(-20deg);
+        }
+
+
+        .btn:hover::before {
+
+            animation:
+                buttonShine
+                0.7s
+                ease;
+        }
+
+
+
+        /* =====================================================
+           HERO ORBS
+        ====================================================== */
+
+        .orb {
+
+            position: absolute;
+
+            border-radius: 50%;
+
+            pointer-events: none;
+
+            filter: blur(2px);
+
+            opacity: 0.3;
+        }
+
+
+        .orb-one {
+
+            width: 270px;
+            height: 270px;
+
+            right: 7%;
+            top: 18%;
+
+            background: #0ea5e9;
+
+            animation:
+                floatOne 8s ease-in-out infinite,
+                orbPulse 4s ease-in-out infinite;
+        }
+
+
+        .orb-two {
+
+            width: 150px;
+            height: 150px;
+
+            right: 28%;
+            bottom: 15%;
+
+            background: #38bdf8;
+
+            animation:
+                floatTwo 6s ease-in-out infinite,
+                orbPulse 5s ease-in-out infinite;
+        }
+
+
+        .orb-three {
+
+            width: 90px;
+            height: 90px;
+
+            left: 45%;
+            top: 20%;
+
+            background: #2563eb;
+
+            animation:
+                floatThree 7s ease-in-out infinite,
+                orbPulse 3.5s ease-in-out infinite;
+        }
+
+
+        .hero::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 500px;
+            height: 500px;
+
+            right: -180px;
+            bottom: -220px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(56,189,248,0.12);
+
+            filter: blur(70px);
+
+            animation:
+                glowMove
+                8s
+                ease-in-out
+                infinite
+                alternate;
+
+            pointer-events: none;
+        }
+
+
+
+        /* =====================================================
+           STATS
+        ====================================================== */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            max-width: 1050px;
+
+            margin:
+                -55px auto 0;
+
+            padding: 0 25px;
+
+            position: relative;
+
+            z-index: 10;
+        }
+
+
+        .stat-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            padding: 30px;
+
+            text-align: center;
+
+            background: white;
+
+            border-right:
+                1px solid
+                #e5e7eb;
+
+            box-shadow:
+                0 15px 45px
+                rgba(15,23,42,0.08);
+
+            transition:
+                transform 0.4s ease,
+                box-shadow 0.4s ease;
+        }
+
+
+        .stat-card:first-child {
+
+            border-radius:
+                15px 0 0 15px;
+        }
+
+
+        .stat-card:last-child {
+
+            border-radius:
+                0 15px 15px 0;
+
+            border-right: none;
+        }
+
+
+        .stat-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: -100%;
+
+            width: 100%;
+            height: 3px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #38bdf8,
+                    transparent
+                );
+
+            transition: 0.6s ease;
+        }
+
+
+        .stat-card:hover {
+
+            transform:
+                translateY(-10px);
+
+            box-shadow:
+                0 25px 55px
+                rgba(15,23,42,0.12);
+        }
+
+
+        .stat-card:hover::before {
+
+            left: 100%;
+        }
+
+
+        .stat-number {
+
+            font-size: 30px;
+
+            font-weight: 750;
+
+            color: #0f172a;
+
+            transition: 0.4s ease;
+        }
+
+
+        .stat-card:hover .stat-number {
+
+            transform: scale(1.12);
+
+            color: #0284c7;
+        }
+
+
+        .stat-label {
+
+            margin-top: 7px;
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            letter-spacing: 1.3px;
+        }
+
+
+
+        /* =====================================================
+           GENERAL SECTIONS
+        ====================================================== */
+
+        .section {
+
+            padding:
+                110px 8%;
+        }
+
+
+        .section-header {
+
+            max-width: 700px;
+
+            margin-bottom: 45px;
+        }
+
+
+        .section-label {
+
+            color: #0284c7;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 12px;
+        }
+
+
+        .section-title {
+
+            font-size:
+                clamp(32px, 5vw, 52px);
+
+            line-height: 1.1;
+
+            color: #0f172a;
+
+            letter-spacing: -1.5px;
+
+            margin-bottom: 15px;
+
+            position: relative;
+        }
+
+
+        .section-title::after {
+
+            content: "";
+
+            display: block;
+
+            width: 0;
+
+            height: 3px;
+
+            margin-top: 15px;
+
+            background: #38bdf8;
+
+            transition:
+                width 1s ease;
+        }
+
+
+        .section-header.active
+        .section-title::after {
+
+            width: 65px;
+        }
+
+
+        .section-description {
+
+            color: #64748b;
+
+            font-size: 16px;
+
+            line-height: 1.8;
+        }
+
+
+
+        /* =====================================================
+           SCROLL REVEAL
+        ====================================================== */
+
+        .reveal {
+
+            opacity: 0;
+
+            transform:
+                translateY(45px)
+                scale(0.97);
+
+            transition:
+                opacity 0.8s ease,
+                transform
+                0.8s
+                cubic-bezier(.22,1,.36,1);
+        }
+
+
+        .reveal.active {
+
+            opacity: 1;
+
+            transform:
+                translateY(0)
+                scale(1);
+        }
+
+
+
+        /* =====================================================
+           ABOUT
+        ====================================================== */
+
+        .about-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 22px;
+        }
+
+
+        .about-card {
+
+            background: white;
+
+            padding: 32px;
+
+            border-radius: 15px;
+
+            border:
+                1px solid
+                #e5e7eb;
+
+            transition:
+                transform 0.35s ease,
+                box-shadow 0.35s ease,
+                border-color 0.35s ease;
+
+            transform-style: preserve-3d;
+
+            will-change: transform;
+        }
+
+
+        .about-card:hover {
+
+            box-shadow:
+                0 20px 50px
+                rgba(15,23,42,0.10);
+
+            border-color: #bae6fd;
+        }
+
+
+        .about-number {
+
+            color: #0284c7;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+            transition: 0.4s ease;
+        }
+
+
+        .about-card:hover
+        .about-number {
+
+            letter-spacing: 3px;
+
+            transform:
+                translateX(5px);
+        }
+
+
+        .about-card h3 {
+
+            font-size: 20px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .about-card p {
+
+            color: #64748b;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+        }
+
+
+
+        /* =====================================================
+           PROJECT INFORMATION
+        ====================================================== */
+
+        .project-box {
+
+            position: relative;
+
+            overflow: hidden;
+
+            display: grid;
+
+            grid-template-columns:
+                1.2fr 1fr;
+
+            gap: 50px;
+
+            padding: 55px;
+
+            background: #081126;
+
+            color: white;
+
+            border-radius: 22px;
+
+            transition:
+                transform 0.5s ease,
+                box-shadow 0.5s ease;
+        }
+
+
+        .project-box:hover {
+
+            transform:
+                translateY(-8px);
+
+            box-shadow:
+                0 30px 70px
+                rgba(8,17,38,0.25);
+        }
+
+
+        .project-box::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 450px;
+            height: 450px;
+
+            right: -200px;
+            top: -220px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(125,211,252,0.08);
+
+            animation:
+                projectGlow
+                7s
+                ease-in-out
+                infinite;
+        }
+
+
+        .project-box h2 {
+
+            position: relative;
+
+            font-size: 38px;
+
+            line-height: 1.15;
+
+            margin-bottom: 20px;
+        }
+
+
+        .project-box p {
+
+            position: relative;
+
+            color: #cbd5e1;
+
+            line-height: 1.8;
+        }
+
+
+        .details-list {
+
+            position: relative;
+        }
+
+
+        .detail {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            gap: 20px;
+
+            padding: 14px 0;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,0.1);
+
+            font-size: 14px;
+        }
+
+
+        .detail span:first-child {
+
+            color: #94a3b8;
+        }
+
+
+        .detail span:last-child {
+
+            color: white;
+
+            text-align: right;
+        }
+
+
+        .github-button {
+
+            position: relative;
+
+            display: inline-block;
+
+            margin-top: 25px;
+
+            padding: 12px 18px;
+
+            border:
+                1px solid
+                rgba(125,211,252,0.5);
+
+            border-radius: 8px;
+
+            color: #bae6fd;
+
+            transition:
+                0.3s ease;
+
+        }
+
+
+        .github-button:hover {
+
+            background: #7dd3fc;
+
+            color: #081126;
+
+            transform:
+                translateY(-4px);
+
+        }
+
+
+
+        /* =====================================================
+           TECHNOLOGIES
+        ====================================================== */
+
+        .tech-grid {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 12px;
+        }
+
+
+        .tech {
+
+            position: relative;
+
+            overflow: hidden;
+
+            padding:
+                12px 18px;
+
+            background: white;
+
+            border:
+                1px solid
+                #e2e8f0;
+
+            border-radius: 30px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease,
+                border-color 0.3s ease;
+        }
+
+
+        .tech:hover {
+
+            transform:
+                translateY(-5px);
+
+            border-color:
+                #7dd3fc;
+
+            box-shadow:
+                0 10px 25px
+                rgba(15,23,42,0.08);
+        }
+
+
+        .tech::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: -120%;
+
+            width: 80%;
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(125,211,252,0.4),
+                    transparent
+                );
+
+            transform:
+                skewX(-20deg);
+        }
+
+
+        .tech:hover::before {
+
+            animation:
+                techShine
+                0.7s
+                ease;
+        }
+
+
+
+        /* =====================================================
+           TABLEAU SECTION
+        ====================================================== */
+
+        .tableau-section {
+
+            background: #eef2f7;
+        }
+
+
+        .tableau-card {
+
+            background: white;
+
+            padding: 20px;
+
+            margin-bottom: 35px;
+
+            border-radius: 18px;
+
+            border:
+                1px solid
+                #e2e8f0;
+
+            box-shadow:
+                0 15px 45px
+                rgba(15,23,42,0.06);
+
+            opacity: 0;
+
+            transform:
+                translateY(50px)
+                scale(0.97);
+
+            transition:
+                opacity 0.9s ease,
+                transform 0.9s
+                cubic-bezier(.22,1,.36,1),
+                box-shadow 0.4s ease;
+        }
+
+
+        .tableau-card.active {
+
+            opacity: 1;
+
+            transform:
+                translateY(0)
+                scale(1);
+        }
+
+
+        .tableau-card:hover {
+
+            box-shadow:
+                0 25px 60px
+                rgba(15,23,42,0.10);
+        }
+
+
+        .tableau-card h3 {
+
+            padding:
+                10px 8px 20px;
+
+            font-size: 19px;
+
+            color: #0f172a;
+        }
+
+
+        tableau-viz {
+
+            display: block;
+
+            width: 100%;
+
+            min-height: 650px;
+        }
+
+
+
+        /* =====================================================
+           VISUALIZATION GRID
+        ====================================================== */
+
+        .visual-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 25px;
+        }
+
+
+        .visual-card {
+
+            background: white;
+
+            padding: 18px;
+
+            border-radius: 17px;
+
+            border:
+                1px solid
+                #e2e8f0;
+
+            box-shadow:
+                0 10px 35px
+                rgba(15,23,42,0.05);
+
+            opacity: 0;
+
+            transform:
+                translateY(60px)
+                scale(0.96);
+
+            transition:
+                opacity 0.8s ease,
+                transform 0.8s
+                cubic-bezier(.22,1,.36,1),
+                box-shadow 0.4s ease;
+
+            transform-style: preserve-3d;
+
+            will-change: transform;
+        }
+
+
+        .visual-card.active {
+
+            opacity: 1;
+
+            transform:
+                translateY(0)
+                scale(1);
+        }
+
+
+        .visual-card:hover {
+
+            box-shadow:
+                0 20px 50px
+                rgba(15,23,42,0.10);
+        }
+
+
+        .visual-card h3 {
+
+            margin:
+                5px 5px 15px;
+
+            color: #1e293b;
+
+            font-size: 16px;
+        }
+
+
+        .visual-card tableau-viz {
+
+            min-height: 500px;
+        }
+
+
+        .visual-card:nth-child(1) {
+            transition-delay: 0.05s;
+        }
+
+        .visual-card:nth-child(2) {
+            transition-delay: 0.10s;
+        }
+
+        .visual-card:nth-child(3) {
+            transition-delay: 0.15s;
+        }
+
+        .visual-card:nth-child(4) {
+            transition-delay: 0.20s;
+        }
+
+        .visual-card:nth-child(5) {
+            transition-delay: 0.25s;
+        }
+
+        .visual-card:nth-child(6) {
+            transition-delay: 0.30s;
+        }
+
+        .visual-card:nth-child(7) {
+            transition-delay: 0.35s;
+        }
+
+        .visual-card:nth-child(8) {
+            transition-delay: 0.40s;
+        }
+
+        .visual-card:nth-child(9) {
+            transition-delay: 0.45s;
+        }
+
+
+
+        /* =====================================================
+           INSIGHTS
+        ====================================================== */
+
+        .insights {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 22px;
+        }
+
+
+        .insight {
+
+            position: relative;
+
+            overflow: hidden;
+
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 15px;
+
+            border:
+                1px solid
+                #e5e7eb;
+
+            opacity: 0;
+
+            transform:
+                translateY(45px)
+                scale(0.96);
+
+            transition:
+                opacity 0.7s ease,
+                transform 0.7s
+                cubic-bezier(.22,1,.36,1),
+                box-shadow 0.4s ease;
+
+            transform-style: preserve-3d;
+        }
+
+
+        .insight.active {
+
+            opacity: 1;
+
+            transform:
+                translateY(0)
+                scale(1);
+        }
+
+
+        .insight:hover {
+
+            transform:
+                translateY(-9px)
+                scale(1.015);
+
+            box-shadow:
+                0 20px 50px
+                rgba(15,23,42,0.09);
+        }
+
+
+        .insight::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+
+            width: 100%;
+            height: 3px;
+
+            background: #7dd3fc;
+
+            transform:
+                scaleX(0);
+
+            transform-origin: left;
+
+            transition:
+                transform 0.4s ease;
+        }
+
+
+        .insight:hover::before {
+
+            transform:
+                scaleX(1);
+        }
+
+
+        .insight-number {
+
+            color: #0284c7;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+            transition: 0.4s ease;
+        }
+
+
+        .insight:hover
+        .insight-number {
+
+            letter-spacing: 2px;
+        }
+
+
+        .insight h3 {
+
+            margin-bottom: 10px;
+
+            font-size: 18px;
+        }
+
+
+        .insight p {
+
+            color: #64748b;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+        }
+
+
+
+        /* =====================================================
+           FOOTER
+        ====================================================== */
+
+        footer {
+
+            background: #081126;
+
+            color: white;
+
+            padding:
+                55px 8%;
+
+            text-align: center;
+        }
+
+
+        footer h3 {
+
+            font-size: 22px;
+
+            margin-bottom: 10px;
+        }
+
+
+        footer p {
+
+            color: #94a3b8;
+
+            font-size: 14px;
+        }
+
+
+        .footer-line {
+
+            width: 50px;
+
+            height: 2px;
+
+            background: #7dd3fc;
+
+            margin:
+                20px auto;
+        }
+
+
+
+        /* =====================================================
+           BACK TO TOP
+        ====================================================== */
+
+        .back-top {
+
+            position: fixed;
+
+            right: 25px;
+            bottom: 25px;
+
+            width: 45px;
+            height: 45px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            border:
+                1px solid
+                #bae6fd;
+
+            background: #081126;
+
+            color: white;
+
+            cursor: pointer;
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            transform:
+                translateY(20px);
+
+            transition:
+                0.4s ease;
+
+            z-index: 999;
+        }
+
+
+        .back-top.show {
+
+            opacity: 1;
+
+            visibility: visible;
+
+            transform:
+                translateY(0);
+        }
+
+
+        .back-top:hover {
+
+            background: #7dd3fc;
+
+            color: #081126;
+
+            transform:
+                translateY(-5px);
+        }
+
+
+
+        /* =====================================================
+           ANIMATIONS
+        ====================================================== */
+
+        @keyframes navbarDrop {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(-100%);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+
+            }
+        }
+
+
+        @keyframes heroText {
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+
+            }
+        }
+
+
+        @keyframes heroGradient {
+
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+
+        @keyframes floatOne {
+
+            0%,100% {
+                transform:
+                    translate(0,0);
+            }
+
+            50% {
+                transform:
+                    translate(-50px,40px);
+            }
+        }
+
+
+        @keyframes floatTwo {
+
+            0%,100% {
+                transform:
+                    translate(0,0);
+            }
+
+            50% {
+                transform:
+                    translate(40px,-35px);
+            }
+        }
+
+
+        @keyframes floatThree {
+
+            0%,100% {
+                transform:
+                    translate(0,0);
+            }
+
+            50% {
+                transform:
+                    translate(-25px,-40px);
+            }
+        }
+
+
+        @keyframes orbPulse {
+
+            0%,100% {
+                opacity: 0.25;
+            }
+
+            50% {
+                opacity: 0.55;
+            }
+        }
+
+
+        @keyframes glowMove {
+
+            0% {
+
+                transform:
+                    translate(0,0)
+                    scale(1);
+
+            }
+
+            100% {
+
+                transform:
+                    translate(-100px,-80px)
+                    scale(1.3);
+
+            }
+        }
+
+
+        @keyframes projectGlow {
+
+            0%,100% {
+
+                transform:
+                    translate(0,0)
+                    scale(1);
+
+            }
+
+            50% {
+
+                transform:
+                    translate(-50px,40px)
+                    scale(1.2);
+
+            }
+        }
+
+
+        @keyframes buttonShine {
+
+            from {
+
+                left: -120%;
+
+            }
+
+            to {
+
+                left: 140%;
+
+            }
+        }
+
+
+        @keyframes techShine {
+
+            from {
+
+                left: -120%;
+
+            }
+
+            to {
+
+                left: 140%;
+
+            }
+        }
+
+
+
+        /* =====================================================
+           RESPONSIVE
+        ====================================================== */
+
+        @media (max-width: 900px) {
+
+            .nav-links {
+
+                display: none;
+            }
+
+
+            .stats {
+
+                grid-template-columns:
+                    1fr;
+
+                margin-top: 30px;
+            }
+
+
+            .stat-card {
+
+                border-right: none;
+
+                border-bottom:
+                    1px solid
+                    #e5e7eb;
+            }
+
+
+            .stat-card:first-child {
+
+                border-radius:
+                    15px 15px 0 0;
+            }
+
+
+            .stat-card:last-child {
+
+                border-radius:
+                    0 0 15px 15px;
+
+                border-bottom: none;
+            }
+
+
+            .about-grid,
+            .insights,
+            .visual-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .project-box {
+
+                grid-template-columns:
+                    1fr;
+
+                padding: 40px 30px;
+            }
+
+
+            .hero h1 {
+
+                letter-spacing:
+                    -2px;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .hero {
+
+                padding:
+                    120px 6% 80px;
+            }
+
+
+            .section {
+
+                padding:
+                    80px 6%;
+            }
+
+
+            .hero-buttons {
+
+                flex-direction:
+                    column;
+
+                align-items:
+                    flex-start;
+            }
+
+
+            tableau-viz {
+
+                min-height:
+                    450px;
+            }
+
+
+            .project-box {
+
+                padding:
+                    30px 25px;
+            }
+
+
+            .cursor-glow {
+
+                display:
+                    none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+
+<body>
+
+
+    <!-- =====================================================
+         CURSOR
+    ====================================================== -->
+
+    <div class="cursor-glow"></div>
+
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            Food<span>Analytics</span>
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="#overview">
+                Overview
+            </a>
+
+            <a href="#about">
+                About
+            </a>
+
+            <a href="#dashboard">
+                Dashboard
+            </a>
+
+            <a href="#visualizations">
+                Visuals
+            </a>
+
+            <a href="#insights">
+                Insights
+            </a>
+
+            <a
+                href="https://github.com/unnatipofficial-cyber"
+                target="_blank"
+                class="github-nav">
+
+                GitHub ↗
+
+            </a>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section
+        class="hero"
+        id="overview">
+
+
+        <div class="orb orb-one"></div>
+
+        <div class="orb orb-two"></div>
+
+        <div class="orb orb-three"></div>
+
+
+        <div class="hero-content">
+
+
+            <div class="hero-tag">
+
+                DATA ANALYTICS
+                •
+                TABLEAU
+                •
+                FLASK
+
+            </div>
+
+
+            <h1>
+
+                Every order<br>
+
+                tells a
+                <span>story.</span>
+
+            </h1>
+
+
+            <p class="hero-description">
+
+                Explore the patterns behind food choices,
+                customer behavior, restaurant preferences,
+                revenue, and delivery performance through
+                interactive data visualization.
+
+            </p>
+
+
+            <div class="hero-buttons">
+
+
+                <a
+                    href="#dashboard"
+                    class="btn btn-primary">
+
+                    Explore Dashboard ↓
+
+                </a>
+
+
+                <a
+                    href="#about"
+                    class="btn btn-outline">
+
+                    Discover the Project ↗
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         STATS
+    ====================================================== -->
+
+    <div class="stats reveal">
+
+
+        <div class="stat-card">
+
+            <div class="stat-number">
+                50000+
+            </div>
+
+            <div class="stat-label">
+                ORDER RECORDS
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-number">
+                9
+            </div>
+
+            <div class="stat-label">
+                VISUALIZATIONS
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-number">
+                8
+            </div>
+
+            <div class="stat-label">
+                STORY POINTS
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         ABOUT
+    ====================================================== -->
+
+    <section
+        class="section"
+        id="about">
+
+
+        <div class="section-header reveal">
+
+
+            <div class="section-label">
+                01 — ABOUT
+            </div>
+
+
+            <h2 class="section-title">
+
+                Understanding food
+                ordering behavior
+                through data.
+
+            </h2>
+
+
+            <p class="section-description">
+
+                This project transforms food-ordering data
+                into meaningful visual insights that help
+                understand customer preferences, restaurant
+                segments, meal choices, ratings, revenue
+                and delivery behavior.
+
+            </p>
+
+
+        </div>
+
+
+
+        <div class="about-grid">
+
+
+            <div class="about-card reveal">
+
+                <div class="about-number">
+                    01
+                </div>
+
+                <h3>
+                    Collect
+                </h3>
+
+                <p>
+
+                    Work with structured food-ordering data
+                    containing customer, restaurant, meal,
+                    order and delivery-related information.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="about-card reveal">
+
+                <div class="about-number">
+                    02
+                </div>
+
+                <h3>
+                    Analyze
+                </h3>
+
+                <p>
+
+                    Identify patterns and relationships
+                    using interactive charts, KPIs,
+                    filters and Tableau dashboards.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="about-card reveal">
+
+                <div class="about-number">
+                    03
+                </div>
+
+                <h3>
+                    Visualize
+                </h3>
+
+                <p>
+
+                    Present the analysis through a
+                    professional dashboard, story
+                    and individual visualizations.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         PROJECT INFORMATION
+    ====================================================== -->
+
+    <section class="section">
+
+
+        <div class="project-box reveal">
+
+
+            <div>
+
+
+                <div class="section-label">
+                    PROJECT INFORMATION
+                </div>
+
+
+                <h2>
+
+                    Food Ordering Behavior
+                    <br>
+                    & Consumer Trends
+
+                </h2>
+
+
+                <p>
+
+                    An interactive analytics project
+                    combining Tableau visualization
+                    with a Flask-based web interface
+                    to present food-ordering patterns
+                    in a clear and professional format.
+
+                </p>
+
+
+                <a
+                    href="https://github.com/unnatipofficial-cyber/Food-Ordering-Behavior-Analytics"
+                    target="_blank"
+                    class="github-button">
+
+                    View Source Code ↗
+
+                </a>
+
+
+            </div>
+
+
+
+            <div class="details-list">
+
+
+                <div class="detail">
+
+                    <span>
+                        Student
+                    </span>
+
+                    <span>
+                        Unnati Ravindra Patil
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        Department
+                    </span>
+
+                    <span>
+                        Artificial Intelligence & Data Science
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        College
+                    </span>
+
+                    <span>
+                        Indira College of Engineering and Management
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        Academic Year
+                    </span>
+
+                    <span>
+                        2026–27
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        Visualization
+                    </span>
+
+                    <span>
+                        Tableau
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        Web Technology
+                    </span>
+
+                    <span>
+                        Flask
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         TECHNOLOGY
+    ====================================================== -->
+
+    <section class="section">
+
+
+        <div class="section-header reveal">
+
+
+            <div class="section-label">
+                02 — TECHNOLOGY
+            </div>
+
+
+            <h2 class="section-title">
+
+                Built with modern tools.
+
+            </h2>
+
+
+            <p class="section-description">
+
+                The project combines data visualization
+                and web technologies to create an
+                interactive analytics experience.
+
+            </p>
+
+
+        </div>
+
+
+
+        <div class="tech-grid reveal">
+
+
+            <div class="tech">
+                Python
+            </div>
+
+            <div class="tech">
+                Flask
+            </div>
+
+            <div class="tech">
+                Tableau
+            </div>
+
+            <div class="tech">
+                HTML
+            </div>
+
+            <div class="tech">
+                CSS
+            </div>
+
+            <div class="tech">
+                JavaScript
+            </div>
+
+            <div class="tech">
+                Data Analytics
+            </div>
+
+            <div class="tech">
+                Data Visualization
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         EXECUTIVE DASHBOARD
+    ====================================================== -->
+
+    <section
+        class="section tableau-section"
+        id="dashboard">
+
+
+        <div class="section-header reveal">
+
+
+            <div class="section-label">
+                03 — EXECUTIVE DASHBOARD
+            </div>
+
+
+            <h2 class="section-title">
+
+                Executive Overview
+
+            </h2>
+
+
+            <p class="section-description">
+
+                A consolidated view of important
+                food-ordering metrics and customer
+                behavior patterns.
+
+            </p>
+
+
+        </div>
+
+
+
+        <div class="tableau-card reveal">
+
+
+            <h3>
+                Executive Overview Dashboard
+            </h3>
+
+
+            <tableau-viz
+
+                src="https://public.tableau.com/views/FoodOrderingBehaviorAnalyticsDashboard/ExecutiveOverviewDashboard"
+
+                toolbar="bottom"
+
+                hide-tabs>
+
+            </tableau-viz>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         STORY
+    ====================================================== -->
+
+    <section class="section tableau-section">
+
+
+        <div class="section-header reveal">
+
+
+            <div class="section-label">
+                04 — TABLEAU STORY
+            </div>
+
+
+            <h2 class="section-title">
+
+                Food Ordering Behavior Story
+
+            </h2>
+
+
+            <p class="section-description">
+
+                Follow the analytical journey from
+                customer preferences to delivery
+                and order-volume patterns.
+
+            </p>
+
+
+        </div>
+
+
+
+        <div class="tableau-card reveal">
+
+
+            <h3>
+                Food Ordering Behavior Story
+            </h3>
+
+
+            <tableau-viz
+
+                src="https://public.tableau.com/views/FoodOrderingBehaviorAnalytics/FoodOrderingBehaviorStory"
+
+                toolbar="bottom"
+
+                hide-tabs>
+
+            </tableau-viz>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         KPI
+    ====================================================== -->
+
+    <section class="section tableau-section">
+
+
+        <div class="section-header reveal">
+
+
+            <div class="section-label">
+                05 — KEY METRICS
+            </div>
+
+
+            <h2 class="section-title">
+
+                Performance at a glance.
+
+            </h2>
+
+
+        </div>
+
+
+
+        <div class="tableau-card reveal">
+
+
+            <h3>
+                Key Performance Metrics
+            </h3>
+
+
+            <tableau-viz
+
+                src="https://public.tableau.com/views/FoodOrderingBehaviorAnalyticsVisualsKPI/KeyPerformanceMetrics"
+
+                toolbar="bottom"
+
+                hide-tabs>
+
+            </tableau-viz>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         VISUALIZATIONS
+    ====================================================== -->
+
+    <section
+        class="section"
+        id="visualizations">
+
+
+        <div class="section-header reveal">
+
+
+            <div class="section-label">
+                06 — VISUALIZATIONS
+            </div>
+
+
+            <h2 class="section-title">
+
+                Explore the data.
+
+            </h2>
+
+
+            <p class="section-description">
+
+                Individual Tableau visualizations provide
+                a closer look at different dimensions
+                of food-ordering behavior.
+
+            </p>
+
+
+        </div>
+
+
+
+        <div class="visual-grid">
+
+
+
+            <!-- VISUAL 1 -->
+
+            <div class="visual-card reveal">
+
+                <h3>
+                    01. Flavors Across Cities
+                </h3>
+
+
+                <tableau-viz
+
+                    src="https://public.tableau.com/views/FoodOrderingBehaviorAnalyticsVisuals/FlavorsAcrossCities"
+
+                    toolbar="bottom"
+
+                    hide-tabs>
+
+                </tableau-viz>
+
+            </div>
+
+
+
+            <!-- VISUAL 2 -->
+
+            <div class="visual-card reveal">
+
+                <h3>
+                    02. Order Distribution by Age Group
+                </h3>
+
+
+                <tableau-viz
+
+                    src="https://public.tableau.com/views/FoodOrderingBehaviorAnalyticsVisuals2/OrderDistributionbyAgeGroupandRestaurantSegment"
+
+                    toolbar="bottom"
+
+                    hide-tabs>
+
+                </tableau-viz>
+
+            </div>
+
+
+
+            <!-- VISUAL 3 -->
+
+            <div class="visual-card reveal">
+
+                <h3>
+                    03. Customer Preferences Across Cuisines
+                </h3>
+
+
+                <tableau-viz
+
+                    src="https://public.tableau.com/views/FoodOrderingBehaviorAnalyticsVisuals3/DistributionofCustomerPreferencesAcrossCuisines"
+
+                    toolbar="bottom"
+
+                    hide-tabs>
+
+                </tableau-viz>
+
+            </div>
+
+
+
+            <!-- VISUAL 4 -->
+
+            <div class="visual-card reveal">
+
+                <h3>
+                    04. Company Type vs Meal Type
+                </h3>
+
+
+                <tableau-viz
+
+                    src="https://public.tableau.com/views/FoodOrderingBehaviorAnalyticsVisuals4/CompanyvsMealType"
+
+                    toolbar="bottom"
+
+                    hide-tabs>
+
+                </tableau-viz>
+
+            </div>
+
+
+
+            <!-- VISUAL 5 -->
+
+            <div class="visual-card reveal">
+
+                <h3>
+                    05. Customer Rating by Meal Type
+                </h3>
+
+
+                <tableau-viz
+
+                    src="https://public.tableau.com/views/FoodOrderingBehaviorAnalyticsVisuals5/CustomerRatingAnalysisbyMealType"
+
+                    toolbar="bottom"
+
+                    hide-tabs>
+
+                </tableau-viz>
+
+            </div>
+
+
+
+            <!-- VISUAL 6 -->
+
+            <div class="visual-card reveal">
+
+                <h3>
+                    06. Cities by Order Volume
+                </h3>
+
+
+                <tableau-viz
+
+                    src="https://public.tableau.com/views/FoodOrderingBehaviorAnalyticsVisuals6/CitiesbyOrderVolume"
+
+                    toolbar="bottom"
+
+                    hide-tabs>
+
+                </tableau-viz>
+
+            </div>
+
+
+
+            <!-- VISUAL 7 -->
+
+            <div class="visual-card reveal">
+
+                <h3>
+                    07. Revenue Contribution by Meal Type
+                </h3>
+
+
+                <tableau-viz
+
+                    src="https://public.tableau.com/views/FoodOrderingBehaviorAnalyticsVisuals7/RevenueContributionbyMealType"
+
+                    toolbar="bottom"
+
+                    hide-tabs>
+
+                </tableau-viz>
+
+            </div>
+
+
+
+            <!-- VISUAL 8 -->
+
+            <div class="visual-card reveal">
+
+                <h3>
+                    08. Delivery Time Distribution
+                </h3>
+
+
+                <tableau-viz
+
+                    src="https://public.tableau.com/views/FoodOrderingBehaviorAnalyticsVisuals8/DistributionofDeliveryTimeAcrossOrders"
+
+                    toolbar="bottom"
+
+                    hide-tabs>
+
+                </tableau-viz>
+
+            </div>
+
+
+
+            <!-- VISUAL 9 -->
+
+            <div class="visual-card reveal">
+
+                <h3>
+                    09. Order Value vs Delivery Fee
+                </h3>
+
+
+                <tableau-viz
+
+                    src="https://public.tableau.com/views/FoodOrderingBehaviorAnalyticsVisuals9/OrderValuevsDeliveryFee"
+
+                    toolbar="bottom"
+
+                    hide-tabs>
+
+                </tableau-viz>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         INSIGHTS
+    ====================================================== -->
+
+    <section
+        class="section"
+        id="insights">
+
+
+        <div class="section-header reveal">
+
+
+            <div class="section-label">
+                07 — INSIGHTS
+            </div>
+
+
+            <h2 class="section-title">
+
+                What the analysis
+                helps reveal.
+
+            </h2>
+
+
+            <p class="section-description">
+
+                The visualizations provide different
+                perspectives on customer preferences,
+                order patterns and operational performance.
+
+            </p>
+
+
+        </div>
+
+
+
+        <div class="insights">
+
+
+
+            <div class="insight reveal">
+
+                <div class="insight-number">
+                    INSIGHT 01
+                </div>
+
+                <h3>
+                    Customer Preferences
+                </h3>
+
+                <p>
+
+                    Cuisine-level analysis helps identify
+                    patterns in customer preferences
+                    and ordering behavior.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="insight reveal">
+
+                <div class="insight-number">
+                    INSIGHT 02
+                </div>
+
+                <h3>
+                    Meal & Restaurant Patterns
+                </h3>
+
+                <p>
+
+                    Comparing meal types and restaurant
+                    segments provides a clearer view
+                    of where orders are concentrated.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="insight reveal">
+
+                <div class="insight-number">
+                    INSIGHT 03
+                </div>
+
+                <h3>
+                    Delivery Performance
+                </h3>
+
+                <p>
+
+                    Delivery-time analysis helps examine
+                    operational patterns across
+                    food orders.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="insight reveal">
+
+                <div class="insight-number">
+                    INSIGHT 04
+                </div>
+
+                <h3>
+                    Revenue Contribution
+                </h3>
+
+                <p>
+
+                    Revenue visualization makes it easier
+                    to compare the contribution of
+                    different meal categories.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="insight reveal">
+
+                <div class="insight-number">
+                    INSIGHT 05
+                </div>
+
+                <h3>
+                    Geographic Patterns
+                </h3>
+
+                <p>
+
+                    City-level analysis provides a
+                    geographic perspective on order
+                    volume and cuisine demand.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="insight reveal">
+
+                <div class="insight-number">
+                    INSIGHT 06
+                </div>
+
+                <h3>
+                    Data-Driven Decisions
+                </h3>
+
+                <p>
+
+                    Combining multiple visual perspectives
+                    supports a more structured understanding
+                    of food-ordering trends.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         BACK TO TOP
+    ====================================================== -->
+
+    <button
+        class="back-top"
+        id="backTop">
+
+        ↑
+
+    </button>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+
+        <h3>
+            Food Ordering Behavior
+            & Consumer Trends
+        </h3>
+
+
+        <div class="footer-line"></div>
+
+
+        <p>
+            Designed & developed by
+            Unnati Ravindra Patil
+        </p>
+
+
+        <p style="margin-top:8px;">
+
+            Artificial Intelligence &
+            Data Science • 2026–27
+
+        </p>
+
+
+    </footer>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+
+        /* =====================================================
+           SCROLL REVEAL
+        ====================================================== */
+
+        const revealElements =
+            document.querySelectorAll(".reveal");
+
+
+        const revealObserver =
+            new IntersectionObserver(
+
+                (entries) => {
+
+                    entries.forEach(entry => {
+
+                        if (entry.isIntersecting) {
+
+                            entry.target
+                                .classList
+                                .add("active");
+
+                            revealObserver
+                                .unobserve(
+                                    entry.target
+                                );
+
+                        }
+
+                    });
+
+                },
+
+                {
+                    threshold: 0.12
+                }
+
+            );
+
+
+        revealElements.forEach(element => {
+
+            revealObserver.observe(element);
+
+        });
+
+
+
+        /* =====================================================
+           CURSOR GLOW
+        ====================================================== */
+
+        const cursorGlow =
+            document.querySelector(
+                ".cursor-glow"
+            );
+
+
+        document.addEventListener(
+            "mousemove",
+            (event) => {
+
+                cursorGlow.style.left =
+                    event.clientX + "px";
+
+                cursorGlow.style.top =
+                    event.clientY + "px";
+
+            }
+        );
+
+
+
+        /* =====================================================
+           NAVBAR
+        ====================================================== */
+
+        const navbar =
+            document.querySelector(
+                ".navbar"
+            );
+
+
+        window.addEventListener(
+            "scroll",
+            () => {
+
+                if (window.scrollY > 40) {
+
+                    navbar.style.background =
+                        "rgba(8,17,38,0.96)";
+
+                    navbar.style.boxShadow =
+                        "0 10px 35px rgba(0,0,0,0.22)";
+
+                } else {
+
+                    navbar.style.background =
+                        "rgba(8,17,38,0.88)";
+
+                    navbar.style.boxShadow =
+                        "none";
+
+                }
+
+            }
+        );
+
+
+
+        /* =====================================================
+           BACK TO TOP
+        ====================================================== */
+
+        const backTop =
+            document.getElementById(
+                "backTop"
+            );
+
+
+        window.addEventListener(
+            "scroll",
+            () => {
+
+                if (window.scrollY > 600) {
+
+                    backTop.classList
+                        .add("show");
+
+                } else {
+
+                    backTop.classList
+                        .remove("show");
+
+                }
+
+            }
+        );
+
+
+        backTop.addEventListener(
+            "click",
+            () => {
+
+                window.scrollTo({
+
+                    top: 0,
+
+                    behavior: "smooth"
+
+                });
+
+            }
+        );
+
+
+
+        /* =====================================================
+           3D CARD TILT
+        ====================================================== */
+
+        const cards =
+            document.querySelectorAll(
+                ".about-card, .insight, .visual-card"
+            );
+
+
+        cards.forEach(card => {
+
+
+            card.addEventListener(
+                "mousemove",
+                (event) => {
+
+                    const rect =
+                        card.getBoundingClientRect();
+
+
+                    const x =
+                        event.clientX -
+                        rect.left;
+
+
+                    const y =
+                        event.clientY -
+                        rect.top;
+
+
+                    const centerX =
+                        rect.width / 2;
+
+
+                    const centerY =
+                        rect.height / 2;
+
+
+                    const rotateX =
+                        ((y - centerY) /
+                        centerY) * -2.5;
+
+
+                    const rotateY =
+                        ((x - centerX) /
+                        centerX) * 2.5;
+
+
+                    card.style.transform =
+
+                        `perspective(1000px)
+                         rotateX(${rotateX}deg)
+                         rotateY(${rotateY}deg)
+                         translateY(-8px)`;
+
+                }
+            );
+
+
+            card.addEventListener(
+                "mouseleave",
+                () => {
+
+                    card.style.transform =
+                        "";
+
+                }
+            );
+
+        });
+
+
+
+        /* =====================================================
+           NUMBER COUNTER
+        ====================================================== */
+
+        const counters =
+            document.querySelectorAll(
+                ".stat-number"
+            );
+
+
+        function animateCounter(element) {
+
+
+            const text =
+                element.innerText.trim();
+
+
+            const hasPlus =
+                text.includes("+");
+
+
+            const target =
+                parseInt(
+                    text
+                        .replace(/,/g, "")
+                        .replace("+", "")
+                );
+
+
+            let current = 0;
+
+
+            const duration = 1500;
+
+
+            const startTime =
+                performance.now();
+
+
+            function update(time) {
+
+
+                const progress =
+                    Math.min(
+                        (time - startTime) /
+                        duration,
+                        1
+                    );
+
+
+                const eased =
+                    1 -
+                    Math.pow(
+                        1 - progress,
+                        3
+                    );
+
+
+                current =
+                    Math.floor(
+                        target * eased
+                    );
+
+
+                element.innerText =
+                    current.toLocaleString() +
+                    (
+                        hasPlus
+                        ? "+"
+                        : ""
+                    );
+
+
+                if (progress < 1) {
+
+                    requestAnimationFrame(
+                        update
+                    );
+
+                }
+
+            }
+
+
+            requestAnimationFrame(
+                update
+            );
+
+        }
+
+
+        const counterObserver =
+            new IntersectionObserver(
+
+                entries => {
+
+                    entries.forEach(entry => {
+
+                        if (
+                            entry.isIntersecting
+                        ) {
+
+                            animateCounter(
+                                entry.target
+                            );
+
+                            counterObserver
+                                .unobserve(
+                                    entry.target
+                                );
+
+                        }
+
+                    });
+
+                },
+
+                {
+                    threshold: 0.8
+                }
+
+            );
+
+
+        counters.forEach(counter => {
+
+            counterObserver.observe(
+                counter
+            );
+
+        });
+
+
+
+        /* =====================================================
+           HERO PARALLAX
+        ====================================================== */
+
+        const orbOne =
+            document.querySelector(
+                ".orb-one"
+            );
+
+
+        const orbTwo =
+            document.querySelector(
+                ".orb-two"
+            );
+
+
+        const orbThree =
+            document.querySelector(
+                ".orb-three"
+            );
+
+
+        window.addEventListener(
+            "mousemove",
+            (event) => {
+
+
+                const x =
+                    (
+                        event.clientX /
+                        window.innerWidth
+                    ) - 0.5;
+
+
+                const y =
+                    (
+                        event.clientY /
+                        window.innerHeight
+                    ) - 0.5;
+
+
+                orbOne.style.marginLeft =
+                    `${x * -25}px`;
+
+
+                orbOne.style.marginTop =
+                    `${y * -25}px`;
+
+
+                orbTwo.style.marginLeft =
+                    `${x * 35}px`;
+
+
+                orbTwo.style.marginTop =
+                    `${y * 35}px`;
+
+
+                orbThree.style.marginLeft =
+                    `${x * -15}px`;
+
+
+                orbThree.style.marginTop =
+                    `${y * -15}px`;
+
+            }
+        );
+
+
+
+        /* =====================================================
+           SMOOTH NAVIGATION
+        ====================================================== */
+
+        document
+            .querySelectorAll(
+                'a[href^="#"]'
+            )
+            .forEach(link => {
+
+
+                link.addEventListener(
+                    "click",
+                    function(event) {
+
+
+                        const target =
+                            document.querySelector(
+                                this.getAttribute(
+                                    "href"
+                                )
+                            );
+
+
+                        if (target) {
+
+
+                            event.preventDefault();
+
+
+                            target.scrollIntoView({
+
+                                behavior:
+                                    "smooth",
+
+                                block:
+                                    "start"
+
+                            });
+
+                        }
+
+                    }
+                );
+
+            });
+
+
+    </script>
+
+
+</body>
+
+</html>
