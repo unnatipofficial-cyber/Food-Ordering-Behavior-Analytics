@@ -147,6 +147,10 @@ The interactive Tableau dashboard will be published here.
 
 The project demonstration link will be added here.
 
+### 🌐 Live Project Demo
+
+[Open Live Project](https://food-ordering-behavior-analytics-1.onrender.com)
+
 ---
 
 ## 👩‍💻 Author
