@@ -151,7 +151,7 @@ Explore the interactive Tableau dashboard to analyze food ordering behavior, cus
 
 ### 🎥 Project Demo
 
-👉 [Watch Project Demo Video](https://drive.google.com/file/d/1KM85Cuvq61VZ_CW07q8pJZn7-v4cMOx6/view?usp=sharing)
+👉 [Watch Project Demo Video](https://youtu.be/4ZOTfeq_c5M)
 
 ### 🌐 Live Project Demo
 
