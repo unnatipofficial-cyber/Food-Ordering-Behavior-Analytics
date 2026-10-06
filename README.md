@@ -141,7 +141,13 @@ The project dashboard provides an interactive view of food ordering behaviour an
 
 ### 📊 Tableau Public Dashboard
 
-The interactive Tableau dashboard will be published here.
+Explore the interactive Tableau dashboard to analyze food ordering behavior, customer preferences, order patterns, revenue contribution, and delivery performance.
+
+👉 [View Interactive Tableau Dashboard](https://public.tableau.com/views/FoodOrderingBehaviorAnalyticsDashboard/ExecutiveOverviewDashboard)
+
+### 📖 Tableau Story
+
+👉 [View Food Ordering Behavior Story](https://public.tableau.com/views/FoodOrderingBehaviorAnalytics/FoodOrderingBehaviorStory)
 
 ### 🎥 Project Demo
 
