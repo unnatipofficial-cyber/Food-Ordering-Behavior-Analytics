@@ -66,18 +66,20 @@ The dashboard includes important Key Performance Indicators such as:
 
 ---
 
-## 📂 Project Structure
+## 📁 Project Structure
 
 ```text
 Food-Ordering-Behavior-Analytics/
 │
 ├── templates/
+│   └── index.html
 │
 ├── App.py
 │
 ├── Food_Ordering_Behavior_Analytics.xlsx
 │
 └── README.md
+```
 ---
 
 ## 🔄 Project Workflow
@@ -128,18 +130,22 @@ The project dashboard provides an interactive view of food ordering behaviour an
 - Monthly Order Trend
 - Delivery Performance
 
+
 ---
 
 ## 🔗 Project Links
 
-### GitHub Repository
-This repository contains the source files, dataset, documentation, and project resources.
+### 💻 GitHub Repository
 
-### Tableau Public Dashboard
-_Add your Tableau Public link here after publishing the dashboard._
+[View Project Repository](https://github.com/unnatipofficial-cyber/Food-Ordering-Behavior-Analytics)
 
-### Project Demo
-_Add your project demo link here._
+### 📊 Tableau Public Dashboard
+
+The interactive Tableau dashboard will be published here.
+
+### 🎥 Project Demo
+
+The project demonstration link will be added here.
 
 ---
 
@@ -154,4 +160,4 @@ Indira College of Engineering and Management, Pune
 
 ## 📌 Conclusion
 
-This project analyzes food ordering behaviour and consumer trends using data visualization techniques. The Tableau dashboard helps understand customer preferences, city-wise demand, order values, delivery performance, and rating patterns.
+This project analyzes food ordering behaviour and consumer trends using data visualization techniques. The Tableau dashboard helps understand customer preferences, city-wise demand, order values, delivery performance, monthly trends, and customer ratings.
