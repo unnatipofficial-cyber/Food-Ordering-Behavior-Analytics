@@ -130,6 +130,25 @@ Insights & Conclusions
 
 ```
 
+---
+
+# 📈 Dashboard KPIs
+
+The Tableau Dashboard provides important Key Performance Indicators (KPIs) that summarize the overall food ordering activity.
+
+| KPI | Value |
+|---|---:|
+| **Total Orders** | 50,000 |
+| **Total Order Value** | 27,386,555 |
+| **Total Delivery Fee** | 2,982,136 |
+| **Average Order Value** | Calculated from the dataset |
+| **Average Customer Rating** | Calculated from the dataset |
+| **Average Time Taken to Order** | Calculated from the dataset |
+
+These KPIs provide a quick overview of overall order volume, transaction value, delivery fees, and customer behaviour.
+
+---
+
 # 💡 Insights & Tableau Story
 
 ## 💡 Key Insights
