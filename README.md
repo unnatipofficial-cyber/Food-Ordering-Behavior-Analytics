@@ -314,7 +314,6 @@ Reports, documentation, screenshots, dataset-related files, and other supporting
 
 👉 [View Project Documents on Google Drive](https://drive.google.com/drive/folders/1GXN1fBCRoLXLCIVuYQJMW2DQXKf1Ls8x?usp=sharing)
 
-> **Note:** Make sure the Google Drive folder is set to **Anyone with the link → Viewer** so that faculty members can access the documents.
 
 ---
 
